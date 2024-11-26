@@ -112,11 +112,13 @@ class SLRModel(nn.Module):
         loss = 0
         for k, weight in self.loss_weights.items():
             if k == 'ConvCTC':
-                loss += weight * self.loss['CTCLoss'](ret_dict["conv_logits"].log_softmax(-1),
+                logits = ret_dict["conv_logits"].log_softmax(-1)
+                loss += weight * self.loss['CTCLoss'](logits,
                                                       label.cpu().int(), ret_dict["feat_len"].cpu().int(),
                                                       label_lgt.cpu().int()).mean()
             elif k == 'SeqCTC':
-                loss += weight * self.loss['CTCLoss'](ret_dict["sequence_logits"].log_softmax(-1),
+                logits = ret_dict["sequence_logits"].log_softmax(-1)
+                loss += weight * self.loss['CTCLoss'](logits,
                                                       label.cpu().int(), ret_dict["feat_len"].cpu().int(),
                                                       label_lgt.cpu().int()).mean()
             elif k == 'Dist':
