@@ -60,7 +60,7 @@ class SLRModel(nn.Module):
             self.conv1d.fc = nn.Linear(hidden_size, self.num_classes)
         if share_classifier:
             self.conv1d.fc = self.classifier
-        # self.register_backward_hook(self.backward_hook)
+        self.register_backward_hook(self.backward_hook)
 
     def backward_hook(self, module, grad_input, grad_output):
         for g in grad_input:
