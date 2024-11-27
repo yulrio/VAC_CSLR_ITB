@@ -61,6 +61,13 @@ class SLRModel(nn.Module):
         if share_classifier:
             self.conv1d.fc = self.classifier
         self.register_backward_hook(self.backward_hook)
+        
+        self.debug = True
+        if self.debug:
+            print(f"Conv logits shape: {ret_dict['conv_logits'].shape}")
+            print(f"Seq logits shape: {ret_dict['sequence_logits'].shape}")
+            print(f"Labels shape: {label.shape}")
+            print(f"Feature lengths: {ret_dict['feat_len']}")
 
     def backward_hook(self, module, grad_input, grad_output):
         for g in grad_input:
